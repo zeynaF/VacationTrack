@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VacationTrack.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AnnualVacationRights">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="DaysCumulated" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="DaysUsed" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="Remarks" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="20" />
+          <Property Name="CategoryType" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="VacationCategory" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Remarks" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Documents">
+          <Key>
+            <PropertyRef Name="DocumentID" />
+          </Key>
+          <Property Name="DocumentID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="DocumentCode" Type="varchar" MaxLength="15" />
+          <Property Name="SourceID" Type="varchar" MaxLength="15" />
+          <Property Name="IssueDate" Type="datetime" />
+          <Property Name="DocImagePath" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonType" Type="varchar" MaxLength="20" />
+          <Property Name="Corporation" Type="varchar" MaxLength="20" />
+          <Property Name="PersonCode" Type="varchar" MaxLength="30" />
+          <Property Name="FirstName" Type="varchar" MaxLength="30" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="15" />
+          <Property Name="LastName" Type="varchar" MaxLength="20" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="SSN" Type="varchar" MaxLength="11" />
+          <Property Name="Gender" Type="varchar" MaxLength="6" />
+          <Property Name="Address" Type="varchar" MaxLength="50" />
+          <Property Name="Telephone" Type="varchar" MaxLength="15" />
+          <Property Name="Fax" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="20" />
+          <Property Name="isManager" Type="varchar" MaxLength="3" />
+          <Property Name="ManagerID" Type="int" />
+          <Property Name="HireDate" Type="datetime" />
+          <Property Name="WorkHours" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="Compensation" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="Remarks" Type="varchar(max)" />
+          <Property Name="AccumulatedSickDays" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="AccumulatedVacation" Type="decimal" Precision="3" Scale="1" />
+        </EntityType>
+        <EntityType Name="VacationRequest">
+          <Key>
+            <PropertyRef Name="VacationID" />
+          </Key>
+          <Property Name="VacationID" Type="int" Nullable="false" />
+          <Property Name="PersonID" Type="int" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="DocumentID" Type="int" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="AbsenceDetails" Type="varchar" MaxLength="50" />
+          <Property Name="AmountOfTime" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="Remarks" Type="varchar(max)" />
+          <Property Name="Status" Type="char" MaxLength="3" />
+        </EntityType>
+        <Association Name="FK__AnnualVacRight__Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="AnnualVacationRights" Type="Self.AnnualVacationRights" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="AnnualVacationRights">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Documents__Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__VacationReq__Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="VacationRequest" Type="Self.VacationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="VacationRequest">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__VacationReq_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="VacationRequest" Type="Self.VacationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VacationRequest">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ManagerID">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Person1" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Person1">
+              <PropertyRef Name="ManagerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VacationTrackStoreContainer">
+          <EntitySet Name="AnnualVacationRights" EntityType="Self.AnnualVacationRights" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VacationRequest" EntityType="Self.VacationRequest" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AnnualVacRight__Person" Association="Self.FK__AnnualVacRight__Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="AnnualVacationRights" EntitySet="AnnualVacationRights" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Documents__Category" Association="Self.FK__Documents__Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__VacationReq__Person" Association="Self.FK__VacationReq__Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="VacationRequest" EntitySet="VacationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__VacationReq_Category" Association="Self.FK__VacationReq_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="VacationRequest" EntitySet="VacationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ManagerID" Association="Self.FK_ManagerID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Person1" EntitySet="Person" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VacationTrack" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AnnualVacationRight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="DaysCumulated" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="DaysUsed" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__AnnualVacRight__Person" FromRole="AnnualVacationRights" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VacationCategory" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Documents" Relationship="Self.FK__Documents__Category" FromRole="Category" ToRole="Documents" />
+          <NavigationProperty Name="VacationRequests" Relationship="Self.FK__VacationReq_Category" FromRole="Category" ToRole="VacationRequest" />
+        </EntityType>
+        <EntityType Name="Document">
+          <Key>
+            <PropertyRef Name="DocumentID" />
+          </Key>
+          <Property Name="DocumentID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="DocumentCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="SourceID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="IssueDate" Type="DateTime" Precision="3" />
+          <Property Name="DocImagePath" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Documents__Category" FromRole="Documents" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Corporation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PersonCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="SSN" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="isManager" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="ManagerID" Type="Int32" />
+          <Property Name="HireDate" Type="DateTime" Precision="3" />
+          <Property Name="WorkHours" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="Compensation" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AccumulatedSickDays" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="AccumulatedVacation" Type="Decimal" Precision="3" Scale="1" />
+          <NavigationProperty Name="AnnualVacationRights" Relationship="Self.FK__AnnualVacRight__Person" FromRole="Person" ToRole="AnnualVacationRights" />
+          <NavigationProperty Name="VacationRequests" Relationship="Self.FK__VacationReq__Person" FromRole="Person" ToRole="VacationRequest" />
+        </EntityType>
+        <EntityType Name="VacationRequest">
+          <Key>
+            <PropertyRef Name="VacationID" />
+          </Key>
+          <Property Name="VacationID" Type="Int32" Nullable="false" />
+          <Property Name="PersonID" Type="Int32" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="DocumentID" Type="Int32" />
+          <Property Name="FromDate" Type="DateTime" Precision="3" />
+          <Property Name="ToDate" Type="DateTime" Precision="3" />
+          <Property Name="AbsenceDetails" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AmountOfTime" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__VacationReq_Category" FromRole="VacationRequest" ToRole="Category" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__VacationReq__Person" FromRole="VacationRequest" ToRole="Person" />
+        </EntityType>
+        <Association Name="FK__AnnualVacRight__Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="AnnualVacationRights" Type="Self.AnnualVacationRight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="AnnualVacationRights">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Documents__Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Documents" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__VacationReq_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="VacationRequest" Type="Self.VacationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VacationRequest">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__VacationReq__Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="VacationRequest" Type="Self.VacationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="VacationRequest">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ManagerID">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Person1" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Person1">
+              <PropertyRef Name="ManagerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VacationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AnnualVacationRights" EntityType="Self.AnnualVacationRight" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Documents" EntityType="Self.Document" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <EntitySet Name="VacationRequests" EntityType="Self.VacationRequest" />
+          <AssociationSet Name="FK__AnnualVacRight__Person" Association="Self.FK__AnnualVacRight__Person">
+            <End Role="Person" EntitySet="People" />
+            <End Role="AnnualVacationRights" EntitySet="AnnualVacationRights" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Documents__Category" Association="Self.FK__Documents__Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__VacationReq_Category" Association="Self.FK__VacationReq_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="VacationRequest" EntitySet="VacationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__VacationReq__Person" Association="Self.FK__VacationReq__Person">
+            <End Role="Person" EntitySet="People" />
+            <End Role="VacationRequest" EntitySet="VacationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ManagerID" Association="Self.FK_ManagerID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Person1" EntitySet="People" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VacationTrackStoreContainer" CdmEntityContainer="VacationEntities">
+          <EntitySetMapping Name="AnnualVacationRights">
+            <EntityTypeMapping TypeName="VacationTrack.AnnualVacationRight">
+              <MappingFragment StoreEntitySet="AnnualVacationRights">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="DaysCumulated" ColumnName="DaysCumulated" />
+                <ScalarProperty Name="DaysUsed" ColumnName="DaysUsed" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="VacationTrack.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
+                <ScalarProperty Name="VacationCategory" ColumnName="VacationCategory" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Documents">
+            <EntityTypeMapping TypeName="VacationTrack.Document">
+              <MappingFragment StoreEntitySet="Documents">
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="DocumentCode" ColumnName="DocumentCode" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="DocImagePath" ColumnName="DocImagePath" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="VacationTrack.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="PersonType" ColumnName="PersonType" />
+                <ScalarProperty Name="Corporation" ColumnName="Corporation" />
+                <ScalarProperty Name="PersonCode" ColumnName="PersonCode" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="isManager" ColumnName="isManager" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="HireDate" ColumnName="HireDate" />
+                <ScalarProperty Name="WorkHours" ColumnName="WorkHours" />
+                <ScalarProperty Name="Compensation" ColumnName="Compensation" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="AccumulatedSickDays" ColumnName="AccumulatedSickDays" />
+                <ScalarProperty Name="AccumulatedVacation" ColumnName="AccumulatedVacation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VacationRequests">
+            <EntityTypeMapping TypeName="VacationTrack.VacationRequest">
+              <MappingFragment StoreEntitySet="VacationRequest">
+                <ScalarProperty Name="VacationID" ColumnName="VacationID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="AbsenceDetails" ColumnName="AbsenceDetails" />
+                <ScalarProperty Name="AmountOfTime" ColumnName="AmountOfTime" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
